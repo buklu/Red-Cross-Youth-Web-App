@@ -18,7 +18,9 @@ try{
 
 exports.sequelize = sequelize;
 
-/*    
+/*
+
+
 
 Host    z5zm8hebixwywy9d.cbetxkdyhwsb.us-east-1.rds.amazonaws.com
 Username    x937u7bj6vytxh44    

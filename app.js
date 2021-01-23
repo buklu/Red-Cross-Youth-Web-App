@@ -110,8 +110,8 @@ app.post('/login', urlEncodedParser, async (req,res)=>{//the login failure handl
                     req.session.council_category=shortenCateg(council.category);                    
                 }
             }
-            res.send(req.session)
-            //res.redirect('/');//if login failed it should redirect them to login anyway
+            //res.send(req.session)
+            res.redirect('/');//if login failed it should redirect them to login anyway
         }else{
             //this runs when username is correct but password is not
             res.redirect('/')
