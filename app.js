@@ -253,8 +253,7 @@ app.get('/allCouncils', async (req,res) =>{
 app.get('/docs', (req,res)=>{
     if(req.session.logged_in!=true){
         res.redirect("/login");
-    }else{
-        res.render('pageMaintenance',{title:'Maintenance'});
+    }else{        
        res.render('docs',{
             title: "Documents",
             nav:{
@@ -496,7 +495,7 @@ app.post('/memForm/advReject/:id', async (req,res)=>{
     res.send({sig:member.council_adv_sig})
 });
 
-app.listen(process.env.PORT || 4000,()=>{
+app.listen(process.env.PORT || 3000,()=>{
     console.log("Server is running!");
 });
 
@@ -554,6 +553,7 @@ app.use((req, res)=>{
 app.use((req, res)=>{
     res.status(500);
     res.send('ERROR 500 OCCURED')
+})
 /*
 app.get('/',(req,res)=>{//i know there's a better way to do this but i'm lazy -derek
     res.render('maintenance',{title:'App Down!'})

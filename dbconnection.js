@@ -1,10 +1,9 @@
 const {Sequelize} = require('sequelize');
-const sequelize = new Sequelize('rcy_db', 'root', '', {
-    logging:false,//na samokan ko when i was running my tests, remove this line if you need to see the logs lang
-    host: 'localhost',
+const sequelize = new Sequelize("qd31a882yxiiqn6y", 'x937u7bj6vytxh44', 'f21atuaqyklbnp5g',{
+    host: 'z5zm8hebixwywy9d.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
     dialect: 'mysql',
     pool: {
-        max: 10,
+        max: 30,
         min: 0,
         acquire: 30000,
         idle: 10000
@@ -20,8 +19,10 @@ try{
 exports.sequelize = sequelize;
 
 /*    
-    host:"lfmerukkeiac5y5w.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
-    user:"m6kvxzjvw4fvofsl",
-    password:"exxzpyih9awp6pa1",
-    database:"fh760xjq4bv7hcgj"
+
+Host    z5zm8hebixwywy9d.cbetxkdyhwsb.us-east-1.rds.amazonaws.com
+Username    x937u7bj6vytxh44    
+Password    f21atuaqyklbnp5g    
+Port    3306    
+Database    qd31a882yxiiqn6y
 */
