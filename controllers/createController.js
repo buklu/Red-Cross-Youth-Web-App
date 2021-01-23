@@ -43,31 +43,57 @@ async function getCouncilId(userId){
 }
 
 //For adding a council
-exports.addCouncil = async (req, res) => {
-    Council.model.hasMany(Committee.model, {foreignKey: 'council_id',sourceKey: 'id'});
-    console.log(req.body)
-    await Council.model.create({
-        user_id: user_id+1,
-        chapter_id: req.body.chapterId,
-        category: req.body.category,
-        name: req.body.name,
-        committees: [
-            {type: 'DRRM', no_of_members:0},
-            {type: 'Pledge 25', no_of_members:0},
-            {type: 'Trainings', no_of_members:0},
-            {type: 'Council Dev', no_of_members:0},
-            {type: 'YAPE', no_of_members:0},
-            {type: 'YPE', no_of_members:0},
-            {type: 'Health Services', no_of_members:0},
-            {type: 'Welfare', no_of_members:0},
-            {type: 'Awards and Recognition', no_of_members:0},
-            {type: 'Safety', no_of_members:0}
-        ]
-    }, {
-        include: [Committee.model]
-    })
+
+exports.addCouncil=async(req, res)=>{    
+    let salt= bcrypt.genSaltSync(saltR);
+    let pass= bcrypt.hashSync(req.body.secret, salt);
+    User.model.hasMany(Council.model,{foreignKey:'user_id',sourceKey:'id'})
+    Council.model.hasMany(Committee.model, {foreignKey: 'council_id',sourceKey: 'id'});    
+    const userInstance=await User.model.create({
+        username: req.body.newName,//from the derek magic
+        password: pass,
+        type:'Council',        
+        councils:{
+            chapter_id: req.session.chapter_id,
+            category: req.body.category,
+            name: req.body.councilName,
+        },
+    },{
+        include:[Council.model]
+    })    
+    Committee.model.bulkCreate([
+                {council_id:userInstance.councils[0].dataValues['id'],type: 'DRRM', no_of_members:0},
+                {council_id:userInstance.councils[0].dataValues['id'],type: 'Pledge 25', no_of_members:0},
+                {council_id:userInstance.councils[0].dataValues['id'],type: 'Trainings', no_of_members:0},
+                {council_id:userInstance.councils[0].dataValues['id'],type: 'Council Dev', no_of_members:0},
+                {council_id:userInstance.councils[0].dataValues['id'],type: 'YAPE', no_of_members:0},
+                {council_id:userInstance.councils[0].dataValues['id'],type: 'YPE', no_of_members:0},
+                {council_id:userInstance.councils[0].dataValues['id'],type: 'Health Services', no_of_members:0},
+                {council_id:userInstance.councils[0].dataValues['id'],type: 'Welfare', no_of_members:0},
+                {council_id:userInstance.councils[0].dataValues['id'],type: 'Awards and Recognition', no_of_members:0},
+                {council_id:userInstance.councils[0].dataValues['id'],type: 'Safety', no_of_members:0}            
+    ])    
 }
 
+exports.addCouncilAdvisor=async(req, res)=>{    
+    let salt= bcrypt.genSaltSync(saltR);
+    let pass= bcrypt.hashSync(req.body.secret, salt);
+    User.model.hasMany(CouncilAdvisor.model,{foreignKey:'user_id',sourceKey:'id'})
+    const userInstance=await User.model.create({
+        username: req.body.username,
+        password: pass,
+        type:'Council Advisor',
+        council_advisors:{
+            council_id:req.body.council_id,
+            first_name:req.body.firstName,
+            middle_name:req.body.middleName,
+            last_name:req.body.lastName
+        },
+    },{
+        include:[CouncilAdvisor.model]
+    })
+    console.log(req.body.secret)
+}
 
 //For adding a member in Membership Form
 
@@ -164,7 +190,7 @@ exports.addMemberForm = async (req, res) => {
 
 //For adding a member to a committee
 exports.addCommitteeMember = async (req, res) => {
-    let council = await getCouncilId(req.body.sessionUserId)
+    let council = await getCouncilId(req.body.session.UserId)
     let committee = await Committee.model.findOne({
         where: {
             council_id: council.id,     //get council_id from Session variable
@@ -180,6 +206,33 @@ exports.addCommitteeMember = async (req, res) => {
           }
     });
 }
+
+
+//For Council Monthly Report Form
+exports.addCouncilMonthlyReport = async (req, res) => {
+    const Doc = CouncilMonthlyReport.model.belongsTo(Document.model, {foreignKey:'document_id'});
+    let council = await getCouncilId(req.session.user_id)
+
+    await CouncilMonthlyReport.model.create({
+        council_id: council.id,
+        for_the_month_of: req.body.month,
+        year: new Date().getFullYear(),
+        name_of_activity: req.body.name_of_activity,
+        nature_of_activity: req.body.nature_of_activity,
+        accomplishments: req.body.accomplishments,
+        objective: req.body.objective,
+        no_of_rcy_participants: req.body.num_of_participants,
+        remarks: req.body.remarks,
+        document:{
+            type: 'COUNCIL_MONTHLY_REPORT',
+            chapter_id: council.chapter_id,  //get from Session variable
+            council_id: council.id,  //get from Session variable
+        }
+    },{
+        include:[Doc]
+    })
+}
+
 
 //For uniform request form
 exports.addUniformRequest = async (req, res) => {

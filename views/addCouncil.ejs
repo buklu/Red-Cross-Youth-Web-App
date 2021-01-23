@@ -19,10 +19,10 @@
           <div class="card">
             <div class="card-header card-header-danger">
               <h4 class="card-title">Add a council</h4>
-              <p class="card-category">Adding a council also makes their council's account!</p>
+              <p class="card-category"><%=message%></p>
             </div>
             <div class="card-body">              
-              <form>              
+              <form id="addForm" action="/act/addCouncil" class="needs-validation" method="POST">
                 <div class="row">
                   <div class="col-md-4">
                     <div class="form-group">
@@ -36,7 +36,7 @@
                   <div class="col-md-7">
                     <div class="form-group">
                       <label for="category">Category</label>
-                      <select class="form-control" id="category" name="category">
+                      <select class="form-control" id="category" name="category" required="">
                         <option disabled selected value> -- Select a category -- </option>
                         <option value="Junior Red Cross Youth">Junior Red Cross Youth</option>
                         <option value="Senior Red Cross Youth">Senior Red Cross Youth</option>
@@ -56,6 +56,5 @@
       </div>
     </div>
   </div>
-
 
 <%-include('./partials/adminFooter.ejs') %>
