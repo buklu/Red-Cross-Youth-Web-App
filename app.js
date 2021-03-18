@@ -95,7 +95,8 @@ app.post('/login', urlEncodedParser, async (req,res)=>{//the login failure handl
                 req.session.type=(req.session.type == 'Chapter Youth Advisor')?'RCY Service Representative':'Chapter Administrator'
                 let data = await Read.getChapterUser(req);
                 req.session.type=(req.session.type==='Chapter Youth Advisor')?'RCY Service Representative':'Chapter Administrator';
-                req.session.chapter_id=data.chapter_personnel['chapter_id'];                
+                req.session.chapter_id=data.chapter_personnel['chapter_id'];  
+                console.log(req.session.chapter_id)              
             }else if(req.session.type == 'Council' || req.session.type == 'Council Advisor'){                 
                 if(req.session.type==='Council'){//i realise that i can abstract this so council side can share one function, but deadlines are real
                     let data=await Read.getCouncilUser(req);
