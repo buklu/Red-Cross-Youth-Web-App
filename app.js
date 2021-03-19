@@ -91,13 +91,12 @@ app.post('/login', urlEncodedParser, async (req,res)=>{//the login failure handl
             req.session.user_id=result['id'];
             req.session.username=result['username'];
             req.session.type=result['type'];            
-            if (req.session.type == 'Chapter Admin' || req.session.type == 'Chapter Youth Advisor'){
-                req.session.type=(req.session.type == 'Chapter Youth Advisor')?'RCY Service Representative':'Chapter Administrator'
+            if (req.session.type == 'Chapter Admin' || req.session.type == 'Chapter Youth Advisor'){                
                 let data = await Read.getChapterUser(req);
                 req.session.type=(req.session.type==='Chapter Youth Advisor')?'RCY Service Representative':'Chapter Administrator';
                 req.session.chapter_id=data.chapter_personnel['chapter_id'];  
-                console.log(req.session.chapter_id)              
-            }else if(req.session.type == 'Council' || req.session.type == 'Council Advisor'){                 
+                console.log(req.session.chapter_id)
+            }else if(req.session.type == 'Council' || req.session.type == 'Council Advisor'){
                 if(req.session.type==='Council'){//i realise that i can abstract this so council side can share one function, but deadlines are real
                     let data=await Read.getCouncilUser(req);
                     req.session.council_id=data.council['id'];
@@ -108,7 +107,7 @@ app.post('/login', urlEncodedParser, async (req,res)=>{//the login failure handl
                     let council=await Read.getCouncilInstance(data.council_advisor['council_id'])
                     req.session.council_id=data.council_advisor['council_id'];
                     req.session.council_name=council.name;
-                    req.session.council_category=shortenCateg(council.category);                    
+                    req.session.council_category=shortenCateg(council.category);
                 }
             }
             //res.send(req.session)
