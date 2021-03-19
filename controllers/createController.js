@@ -17,7 +17,7 @@ const OtherOrganizationsAffiliations=require('../models/other_organizations_affi
 const TrainingsAttended=require('../models/trainings_attended');
 const User=require('../models/user');
 
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const saltR = 10;
 
 Chapter.model.hasMany(Council.model, {foreignKey: 'chapter_id',sourceKey: 'id'});

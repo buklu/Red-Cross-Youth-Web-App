@@ -14,7 +14,7 @@ const Read = require('./controllers/readController');
 // const routes = require ('./routes/routes') //idk what this is for -derek
 
 const session = require("express-session");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const saltR = 10;
 const mysql = require("mysql");
 
